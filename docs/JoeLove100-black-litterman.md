@@ -35,6 +35,7 @@ Directory structure:
         └── test_market_data/
             └── test_engine.py
 
+[See the reference Black-Litterman Project on GitHub](https://github.com/JoeLove100/black-litterman)
 
 Files Content:
 
