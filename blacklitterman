@@ -1,0 +1,316 @@
+# Feasibility Assessment: PyPortfolioOpt as Black-Litterman Backend
+
+After analyzing the PyPortfolioOpt library's Black-Litterman implementation and comparing it with the custom implementation in the existing app, I can provide a comprehensive assessment of using PyPortfolioOpt 1.5.6 as a backend for a Streamlit-based Black-Litterman application.
+
+## Overall Feasibility
+
+**Verdict: FEASIBLE**
+
+PyPortfolioOpt offers a robust, well-documented implementation of the Black-Litterman model that can serve as an excellent backend for a new application. The library provides all the core functionality needed to replace the custom implementation in the original app.
+
+## Benefits of Using PyPortfolioOpt
+
+1. **Comprehensive Implementation**: The library follows the mathematical formulation described in academic papers, similar to the original app.
+
+2. **Flexible API**: PyPortfolioOpt offers multiple ways to input views (absolute, relative) and allows customization of confidence levels.
+
+3. **Idzorek Method Support**: The original app uses Idzorek's method for converting confidence to variance, which PyPortfolioOpt also supports.
+
+4. **Market-Implied Returns**: The library includes helper functions for calculating market-implied risk aversion and prior returns.
+
+5. **Maintained Project**: PyPortfolioOpt is an actively maintained library with documentation and tests.
+
+## Potential Challenges
+
+1. **Data Structure Differences**: 
+   - The original app uses a custom `ViewCollection` class to manage views, while PyPortfolioOpt uses a more basic system with view matrices.
+   - Integration will require adapting the UI to collect views in a format compatible with PyPortfolioOpt.
+
+2. **Confidence Handling**: 
+   - Both implementations use Idzorek's method, but the implementation details might differ slightly.
+   - PyPortfolioOpt expects confidence values between 0 and 1, which matches the original app.
+
+3. **Data Source Integration**:
+   - PyPortfolioOpt doesn't include data fetching functionality like the original app's Reuters API integration.
+   - The new app will need to implement data retrieval separately and format it for PyPortfolioOpt.
+
+4. **User Interface Translation**:
+   - Moving from PySide2 to Streamlit requires redesigning the UI components.
+   - Streamlit's reactivity model differs from Qt's signal-slot mechanism.
+
+## Comparison of Key Functions
+
+| Feature | Original App | PyPortfolioOpt |
+|---------|-------------|----------------|
+| Absolute Views | ✓ | ✓ |
+| Relative Views | ✓ | ✓ |
+| View Confidence | ✓ (0-1 scale) | ✓ (0-1 scale) |
+| Idzorek Method | ✓ | ✓ |
+| Market-Implied Returns | ✓ | ✓ |
+| BL Weights Calculation | ✓ | ✓ |
+| Visualization | Custom Qt charts | Needs implementation |
+| Data Sources | Reuters API, Local Excel | Needs implementation |
+
+Based on this assessment, it's feasible to create a Streamlit-based Black-Litterman application using PyPortfolioOpt as the backend. The new app can maintain all the core functionality of the original while leveraging PyPortfolioOpt's robust implementation and Streamlit's interactive features.
+
+# Product Requirements Document (PRD)
+
+## Black-Litterman Portfolio Optimization Tool
+
+### 1. Overview
+
+The Black-Litterman Portfolio Optimization Tool is a web-based application built with Streamlit that enables users to create and optimize investment portfolios using the Black-Litterman model. It allows investors to incorporate their own views on asset performance alongside market-implied expected returns, resulting in more stable and intuitive portfolio allocations.
+
+### 2. Objectives
+
+- Create an accessible, web-based portfolio optimization tool
+- Leverage PyPortfolioOpt for Black-Litterman calculations
+- Provide intuitive UI for expressing investment views with confidence levels
+- Generate visually appealing portfolio allocations and metrics
+- Support multiple data sources (CSV upload, API integration)
+
+### 3. Target Users
+
+- Investment professionals
+- Financial advisors
+- Portfolio managers
+- Quantitative analysts
+- Retail investors with financial knowledge
+
+### 4. User Flows
+
+#### 4.1 Data Input
+
+1. **Upload Market Data**
+   - Upload price data via CSV or Excel
+   - Option to use sample data for demonstration
+   - Support for data from financial APIs (optional)
+
+2. **Asset Universe Configuration**
+   - Define the investment universe by selecting assets
+   - Optionally specify market capitalization for market-implied returns
+
+3. **Date Range Selection**
+   - Set start and end dates for historical data analysis
+   - Select calculation date for market weights
+
+#### 4.2 View Management
+
+1. **Add Investment Views**
+   - Support for up to 4 views (as in the original app)
+   - Two view types:
+     - **Absolute Views**: "Asset X will return Y%"
+     - **Relative Views**: "Asset X will outperform Asset Y by Z%"
+
+2. **Configure View Confidence**
+   - Slider control for setting confidence (0-100%)
+   - Visual indicator of confidence level
+
+3. **View Editing**
+   - Edit existing views
+   - Delete views
+   - Clear all views
+
+#### 4.3 Model Settings
+
+1. **Risk Parameters**
+   - Set risk aversion parameter
+   - Configure tau parameter
+   - Option to use market-implied risk aversion
+
+2. **Calculation Settings**
+   - Choose covariance estimation method
+   - Select returns calculation method
+
+#### 4.4 Results Visualization
+
+1. **Portfolio Weights**
+   - Bar chart comparing market weights to Black-Litterman weights
+   - Tabular display of all weights
+
+2. **Expected Returns**
+   - Bar chart of expected returns
+   - Option to compare prior vs. posterior expected returns
+
+3. **Portfolio Metrics**
+   - Expected return
+   - Expected volatility
+   - Sharpe ratio
+   - Diversification metrics
+
+4. **Export Results**
+   - Download weights as CSV
+   - Export visualization as image
+   - Save complete analysis report
+
+### 5. Technical Architecture
+
+#### 5.1 Frontend (Streamlit)
+
+- **Main Dashboard**: Overall layout and navigation
+- **Data Panel**: Upload and configuration of input data
+- **View Manager**: Interface for adding/editing views
+- **Settings Panel**: Model parameter configuration
+- **Results Display**: Charts and metrics output
+- **Export Tools**: Data and visualization export
+
+#### 5.2 Backend (Python)
+
+- **Data Processing Layer**:
+  - Data validation and cleaning
+  - Price to returns conversion
+  - Market cap to weights conversion
+
+- **Black-Litterman Model (PyPortfolioOpt)**:
+  - Market-implied returns calculation
+  - View processing
+  - Black-Litterman posterior calculation
+  - Portfolio optimization
+
+- **Visualization Engine**:
+  - Interactive charts (using Plotly)
+  - Portfolio performance metrics
+  - Results formatting
+
+#### 5.3 Data Flow
+
+1. User uploads or selects data source
+2. System processes data and calculates covariance and market weights
+3. User adds investment views with confidence levels
+4. System converts views to PyPortfolioOpt format (P, Q matrices)
+5. PyPortfolioOpt calculates posterior returns and covariance
+6. System generates optimal portfolio weights
+7. Results are displayed interactively to the user
+
+### 6. Key Components
+
+#### 6.1 View Management System
+
+Views in the Black-Litterman model represent the user's expectations about future returns. The system will support:
+
+1. **Absolute Views**
+   - Select an asset
+   - Specify expected return
+   - Set confidence level
+
+   ```python
+   # Backend representation
+   absolute_views = {"AAPL": 0.10, "MSFT": 0.05}  # 10% and 5% expected returns
+   confidences = [0.6, 0.8]  # 60% and 80% confidence
+   
+   # PyPortfolioOpt usage
+   bl = BlackLittermanModel(cov_matrix, absolute_views=absolute_views, 
+                           view_confidences=confidences, omega="idzorek")
+   ```
+
+2. **Relative Views**
+   - Select long asset(s)
+   - Select short asset(s)
+   - Specify expected outperformance
+   - Set confidence level
+
+   ```python
+   # Backend representation
+   # "GOOG will outperform FB by 3%"
+   P = np.array([[0, 1, -1, 0, 0]])  # Picking matrix for assets
+   Q = np.array([0.03])  # Outperformance
+   confidences = [0.5]  # 50% confidence
+   
+   # PyPortfolioOpt usage
+   bl = BlackLittermanModel(cov_matrix, P=P, Q=Q, 
+                           view_confidences=confidences, omega="idzorek")
+   ```
+
+#### 6.2 Data Management System
+
+1. **CSV/Excel Upload**
+   - Parse uploaded files for price data and market cap data
+   - Handle different date formats and frequency
+   - Data validation and missing value handling
+
+2. **API Integration** (Optional)
+   - Connect to financial data providers
+   - Cache data to improve performance
+   - Handle authentication and rate limiting
+
+3. **Data Transformation**
+   - Convert prices to returns
+   - Calculate covariance matrix
+   - Compute market-implied returns
+
+#### 6.3 Visualization System
+
+1. **Portfolio Allocation Chart**
+   - Bar chart comparing market weights to Black-Litterman weights
+   - Interactive hover details
+   - Color-coded by asset class
+
+2. **Expected Returns Chart**
+   - Comparison of prior vs. posterior expected returns
+   - Confidence intervals
+
+3. **Efficient Frontier Plot** (Optional)
+   - Plot the efficient frontier
+   - Mark the position of the optimal portfolio
+   - Compare with market portfolio
+
+### 7. Implementation Plan
+
+#### 7.1 Phase 1: Core Functionality
+
+- Basic Streamlit UI setup
+- CSV/Excel data upload functionality
+- Basic Black-Litterman implementation with PyPortfolioOpt
+- Simple absolute view input
+- Basic portfolio visualization
+
+#### 7.2 Phase 2: Enhanced Features
+
+- Relative view support
+- Improved view management UI
+- Multiple visualization options
+- Parameter tuning interface
+- Data validation and error handling
+
+#### 7.3 Phase 3: Advanced Features
+
+- API integration for market data
+- Advanced portfolio metrics
+- Comparative analysis tools
+- Export functionality
+- Performance optimizations
+
+### 8. Technical Requirements
+
+#### 8.1 Dependencies
+
+- Python 3.7+
+- Streamlit 1.10+
+- PyPortfolioOpt 1.5.6+
+- Pandas 1.3+
+- NumPy 1.20+
+- Plotly 5.0+
+- Pillow 8.0+ (for image export)
+
+#### 8.2 Deployment Options
+
+- Streamlit Cloud
+- Docker container
+- Local installation
+
+### 9. Security Considerations
+
+- No storage of sensitive financial data
+- Optional user authentication for saved portfolios
+- Data encryption for API keys
+
+### 10. Success Metrics
+
+- User engagement time
+- Number of portfolios created
+- Feature usage statistics
+- User feedback scores
+
+---
+
+This PRD outlines a feasible approach to creating a modern, web-based Black-Litterman portfolio optimization tool using PyPortfolioOpt as the backend and Streamlit as the frontend. The design maintains the core functionality and mathematical rigor of the original Qt-based application while making it more accessible through a web interface.
