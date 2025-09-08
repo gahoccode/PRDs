@@ -1,58 +1,147 @@
-Create a Python-based web application with the following specifications:
+# Vietnam Stock Portfolio Analyzer - Product Requirements Document
 
-Framework & Libraries:
+---
 
-Backend: Flask
-Frontend: HTML, CSS, Bootstrap
-Data Loader: vnstock (to fetch Vietnam stock prices)
-Analysis: QuantStats (for performance metrics, tear sheets, plots)
-Frontend Structure:
+## Overview
 
-HTML Templates (in templates/ folder):
+Create a Python-based web application for analyzing Vietnam stock portfolio performance with comprehensive metrics and visualizations.
 
-index.html:
-Form fields:
-List of stock tickers (textarea or tag-based input)
-Date range: start date and end date (date inputs)
-Initial capital (numeric input)
-Bootstrap-powered responsive layout
-Submits form data to /analyze via POST
-results.html:
-Displays portfolio performance metrics (returns, volatility, Sharpe, drawdowns)
-Embeds charts and/or tear sheet visuals from QuantStats
-Bootstrap layout for summary stats and graphics
-Static Assets (in static/ folder):
+---
 
-css/style.css: Custom styles for layout, charts, forms
-js/script.js: UI interactivity and input validation (e.g., check ticker format, date range logic)
-Backend Structure (app.py):
+## Technical Specifications
 
-/: Renders index.html
-/analyze:
-Receives user input
-Uses vnstock to fetch historical data for selected tickers
-Simulates equal-weight portfolio or custom logic
-Computes portfolio returns
-Uses quantstats to generate:
-Key performance stats (Sharpe, Sortino, max drawdown)
-HTML tear sheet (saved to templates/qs_report.html)
-Plots (saved to static folder and rendered in results.html)
-Returns results.html with embedded performance visuals and stats
-Testing (tests/test_app.py):
+### Framework & Libraries
 
-Unit tests:
-Data fetching from vnstock for various edge cases (invalid ticker, market holiday gaps)
-Portfolio return calculation logic
-QuantStats output parsing and file generation
-Integration tests:
-Route validation (/, /analyze)
-POST request behavior with valid/invalid inputs
-Frontend tests (optional):
-Validation logic on client side
-Test rendering of metrics and embedded visualizations
-User Experience:
+| Component | Technology |
+|-----------|------------|
+| **Backend** | Flask |
+| **Frontend** | HTML, CSS, Bootstrap |
+| **Data Loader** | vnstock (Vietnam stock prices) |
+| **Analysis** | QuantStats (performance metrics, tear sheets, plots) |
 
-Bootstrap-based responsive layout
-Interactive charts (optional: download or zoom)
-Clear display of portfolio health and performance over time
-Tear sheet download option for detailed offline review
+---
+
+## Frontend Structure
+
+### HTML Templates (`templates/` folder)
+
+#### `index.html`
+**Form Components:**
+- **Stock Tickers Input**: Textarea or tag-based input for list of stock tickers
+- **Date Range**: Start date and end date inputs
+- **Initial Capital**: Numeric input field
+- **Layout**: Bootstrap-powered responsive design
+- **Submission**: POST request to `/analyze` endpoint
+
+#### `results.html`
+**Display Features:**
+- Portfolio performance metrics (returns, volatility, Sharpe ratio, drawdowns)
+- Embedded charts and tear sheet visuals from QuantStats
+- Bootstrap layout for summary statistics and graphics
+
+---
+
+### Static Assets (`static/` folder)
+
+#### `css/style.css`
+- Custom styles for layout, charts, and forms
+- Responsive design enhancements
+
+#### `js/script.js`
+- UI interactivity and user experience enhancements
+- Input validation logic:
+  - Ticker format validation
+  - Date range logic verification
+
+---
+
+## Backend Structure (`app.py`)
+
+### Route Definitions
+
+#### `/` - Home Page
+- **Purpose**: Renders `index.html`
+- **Function**: Display the main input form
+
+#### `/analyze` - Analysis Endpoint
+**Processing Pipeline:**
+1. **Data Reception**: Accepts user input from form submission
+2. **Data Fetching**: Uses vnstock to retrieve historical data for selected tickers
+3. **Portfolio Simulation**: Implements equal-weight portfolio or custom allocation logic
+4. **Return Calculation**: Computes portfolio returns based on selected parameters
+5. **Analysis Generation**: Utilizes QuantStats to generate:
+   - Key performance statistics (Sharpe ratio, Sortino ratio, maximum drawdown)
+   - HTML tear sheet (saved to `templates/qs_report.html`)
+   - Performance plots (saved to `static/` folder)
+6. **Response**: Returns `results.html` with embedded performance visuals and statistics
+
+---
+
+## Testing Framework (`tests/test_app.py`)
+
+### Unit Tests
+**Data Layer Tests:**
+- vnstock data fetching edge cases
+  - Invalid ticker handling
+  - Market holiday gap management
+
+**Business Logic Tests:**
+- Portfolio return calculation accuracy
+- QuantStats output parsing reliability
+- File generation functionality
+
+### Integration Tests
+**Route Testing:**
+- Homepage route (`/`) validation
+- Analysis route (`/analyze`) functionality
+- POST request behavior with valid and invalid inputs
+
+**Frontend Tests** (Optional)
+- Client-side validation logic verification
+- Metrics and visualization rendering tests
+
+---
+
+## User Experience Features
+
+### Design Elements
+- **Bootstrap-based responsive layout** for optimal viewing across devices
+- **Interactive charts** with optional download and zoom capabilities
+- **Clear portfolio health indicators** and performance timeline display
+- **Tear sheet download option** for detailed offline analysis
+
+### Performance Metrics Display
+- Real-time portfolio statistics
+- Visual performance charts
+- Risk assessment indicators
+- Historical performance analysis
+
+---
+
+## Implementation Notes
+
+### Data Flow
+1. User inputs stock tickers, date range, and initial capital
+2. Backend fetches historical data using vnstock
+3. Portfolio analysis performed with QuantStats
+4. Results displayed with embedded charts and metrics
+5. Optional tear sheet generation for detailed reporting
+
+### Error Handling
+- Invalid ticker symbol validation
+- Date range validation
+- Market data availability checks
+- Portfolio calculation error management
+
+---
+
+## Future Enhancements
+- Real-time data updates
+- Advanced portfolio optimization algorithms
+- Multi-currency support
+- Mobile application development
+- API integration for third-party services
+
+---
+
+*Last Updated: September 2025*
