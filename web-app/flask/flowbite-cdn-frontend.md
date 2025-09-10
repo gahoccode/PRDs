@@ -9,7 +9,7 @@
 The frontend will be a responsive web interface built with Tailwind CSS and Flowbite.
 It will serve as the presentation layer for a Python-based backend (Flask, FastAPI, Django, etc.).
 The frontend should focus on:
-- **Simplicity** → easy to adapt to different data models.
+- **Simplicity** → easy to adapt to different data models (use CDN links without needing for any frontend build server )
 - **Consistency** → unified professional look and feel across dashboards, forms, and tables.
 
 ---
@@ -28,8 +28,7 @@ The frontend should focus on:
 The frontend will include the following reusable UI building blocks:
 
 ### 3.1 Layout
-- Navigation bar (header with branding + user profile dropdown).
-- Sidebar (optional for dashboards, collapsible).
+- Navigation bar
 - Content area (main section for rendering API-driven data).
 
 ### 3.2 Forms
@@ -40,18 +39,14 @@ The frontend will include the following reusable UI building blocks:
 
 ### 3.3 Data Presentation
 - Tables
-- Charts (specified by user request, plotly, recharts, etc...).
+- Charts (charting libraries can be used with CDN links).
+- Use Plotly.js specifically for candlestick charts 
 - Cards (summary stats, KPIs).
 
 ### 3.4 Feedback
 - Loading spinners.
 - Toast notifications (success, error, info).
 - Modal dialogs (confirmations, details).
-
-### 3.5 User Session Elements
-- Login form / authentication placeholder.
-- Profile dropdown.
-- Session-aware navigation (show/hide menu items).
 
 ---
 
@@ -64,10 +59,9 @@ The frontend will include the following reusable UI building blocks:
 
 ## 5. Styling & Theming
 
-- Tailwind CSS (via CDN).
+- Tailwind CSS (via CDN link).
 - Flowbite component library via CDN (for prebuilt UI widgets).
 - Support for light/dark mode toggle.
-- Theme customization via Tailwind config (optional).
 
 ---
 
