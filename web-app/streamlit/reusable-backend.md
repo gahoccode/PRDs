@@ -85,7 +85,7 @@ The focus is to ensure that Streamlit serves as a thin UI layer, while the backe
 - Streamlit app works as a functional prototype for finance workflows.
 - Backend package is reusable across:
   - Streamlit
-  - Flask + Tailwind/Flowbite
+  - Flask + Tailwind/$ARGUMENTS
   - React/Next.js
 - Minimal rework required to migrate from Streamlit to a production-grade frontend.
 - Backend can be containerized and deployed independently (e.g., on Render, AWS Lambda).

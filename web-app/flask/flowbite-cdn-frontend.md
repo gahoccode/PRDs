@@ -6,7 +6,7 @@
 
 ## 1. Overview
 
-The frontend will be a responsive web interface built with Tailwind CSS and Flowbite.
+The frontend will be a responsive web interface built with Tailwind CSS and $ARGUMENTS.
 It will serve as the presentation layer for a Python-based backend (Flask, FastAPI, Django, etc.).
 The frontend should focus on:
 - **Simplicity** → easy to adapt to different data models (use CDN links without needing for any frontend build server )
@@ -60,7 +60,7 @@ The frontend will include the following reusable UI building blocks:
 ## 5. Styling & Theming
 
 - Tailwind CSS (via CDN link).
-- Flowbite component library via CDN (for prebuilt UI widgets).
+- $ARGUMENTS component library via CDN (for prebuilt UI widgets).
 - Support for light/dark mode toggle.
 
 ---
@@ -75,6 +75,6 @@ The frontend will include the following reusable UI building blocks:
 
 - Frontend can be connected to any Python backend with minimal changes.
 - UI components are reusable across finance dashboards, portfolio analysis tools, or internal enterprise apps.
-- Developers can prototype new pages quickly using Flowbite + Tailwind utilities.
+- Developers can prototype new pages quickly using $ARGUMENTS + Tailwind utilities.
 
 ---
