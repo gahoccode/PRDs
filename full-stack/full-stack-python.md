@@ -144,6 +144,9 @@ def calculate_portfolio_metrics(
 	•	Migration to React/Vite should use global state (Context/Redux/Zustand) in place of sessionStorage
 	•	Add deep-linking later if sharing URLs with embedded parameters becomes important
 
+6. Tests
+	• tests suite verifying routing, pydantic model imports
+
 ⸻
 
 Routing Design Document
