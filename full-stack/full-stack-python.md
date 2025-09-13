@@ -27,14 +27,94 @@ Referenced Frontend Spec: [Flowbite CDN Frontend Spec](https://raw.githubusercon
 3. Architecture
 
 3.1 Backend (Python API Layer)
+
+
+
+Directory Structure:
+```
+app/
+├── main.py              # Entry point
+├── routes/              # Define endpoint handlers
+│   ├── route_statements.py    # /statements route - financial statements
+│   ├── route_optimize.py      # /optimize route - charts and visualization
+│   ├── route_tearsheet.py     # /tearsheet route - financial tearsheet
+│   └── route_valuation.py     # /valuation route - charts, tables and visualization
+├── schemas/             # Pydantic models (request/response contracts)
+│   ├── schema_statements.py     # Financial statements schemas
+│   ├── schema_optimize.py     # Optimization analysis schemas
+│   ├── schema_tearsheet.py    # Tearsheet schemas
+│   ├── schema_valuation.py      # Valuation schemas
+│   └── schema_common.py       # Shared schemas (ticker, date range, period)
+├── services/            # Business logic / domain layer
+│   ├── service_statements.py    # Financial statements processing
+│   ├── service_optimize.py    # Portfolio optimization logic
+│   ├── service_tearsheet.py   # Tearsheet generation
+│   └── service_valuation.py   # Valuation calculations
+└── db/                  # Database / ORM models, sessions, etc.
+```
+
+
+Key Features:
 	•	Built with Python web framework (e.g., FastAPI)
 	•	Provides REST API endpoints for data access and analysis
 	•	Validates all requests and responses with Pydantic
-	•	Uses centralized Pydantic models stored in a dedicated models.py (or schemas.py) file
+	•	Uses centralized Pydantic models stored in schemas/ directory
 	•	Functions must use type hints as inline documentation
 	•	Business logic functions must include docstrings
 	•	API endpoints expose only validated, serialized responses
 	•	OpenAPI/Swagger auto-generated from FastAPI
+
+3.2 Coding Conventions
+
+1. **Type Hints**: All Python functions must use type hints (parameters and return types).
+
+2. **Docstrings**: All business logic functions (those in services/) must have docstrings that describe:
+   - What the function does (purpose)
+   - Its inputs & outputs (types, semantic meaning)
+   - Any side effects or important business rules / constraints
+
+3. **Shared Contract**: 
+   - Pydantic models in schemas/ are the single source of truth
+   - Backend shouldn't duplicate schema logic elsewhere
+   - Use common schemas for repeated structures (e.g. error responses, pagination, user profile)
+
+
+Example of proper function implementation:
+```python
+from typing import List, Optional
+from datetime import datetime
+from app.schemas.schema_optimize import PortfolioAnalysis  # Import from schemas directory
+
+def calculate_portfolio_metrics(
+    tickers: List[str],
+    start_date: str,
+    end_date: str,
+    risk_free_rate: float = 0.02
+) -> PortfolioAnalysis:
+    """
+    Calculate portfolio performance metrics including expected return, volatility, and Sharpe ratio.
+    
+    Args:
+        tickers: List of stock ticker symbols (e.g., ['AAPL', 'GOOGL', 'MSFT'])
+        start_date: Start date for analysis period in 'YYYY-MM-DD' format
+        end_date: End date for analysis period in 'YYYY-MM-DD' format
+        risk_free_rate: Annual risk-free rate (default: 0.02 for 2%)
+    
+    Returns:
+        PortfolioAnalysis object containing calculated metrics
+        
+    Side Effects:
+        - Makes API calls to fetch historical price data
+        - Performs statistical calculations on price returns
+        
+    Business Rules:
+        - Minimum 30 days of data required for meaningful calculations
+        - All tickers must be valid and have data for the specified period
+        - Risk-free rate should be annualized
+    """
+    # Implementation here
+    pass
+```
 
 3.2 Frontend (General Routing Overview)
 	•	Landing Page (/): Input form for ticker, date range, and time period
