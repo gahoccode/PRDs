@@ -171,8 +171,8 @@ Version: 1.0
 
 {
   "ticker": "AAPL",
-  "start": "2020-01-01",
-  "end": "2023-12-31",
+  "startDate": "2020-01-01",
+  "endDate": "2023-12-31",
   "period": "quarterly"
 }
 
@@ -214,9 +214,10 @@ Version: 1.0
 
 4. JavaScript Helpers
 
+
 // Save inputs
-function saveParams(ticker, start, end, period) {
-  sessionStorage.setItem("analysisParams", JSON.stringify({ ticker, start, end, period }));
+function saveParams(ticker, startDate, endDate, period) {
+  sessionStorage.setItem("analysisParams", JSON.stringify({ ticker, startDate, endDate, period }));
 }
 
 // Retrieve inputs
