@@ -145,7 +145,7 @@ def calculate_portfolio_metrics(
 	•	Add deep-linking later if sharing URLs with embedded parameters becomes important
 
 6. Tests
-	• tests suite verifying routing, pydantic model imports
+	• tests suite verifying routing, pydantic model imports```
 
 ⸻
 
