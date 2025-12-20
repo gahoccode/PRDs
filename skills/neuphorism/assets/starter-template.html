@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuphorism Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Surface */
+      --neu-bg: #e6e8ed;
+      --neu-bg-light: #f7f9fc;
+      --neu-bg-dark: #d1d4db;
+      
+      /* Shadows */
+      --neu-shadow-dark: #c5c8ce;
+      --neu-shadow-light: #ffffff;
+      
+      /* Text */
+      --neu-text: #4a5568;
+      --neu-text-secondary: #718096;
+      --neu-heading: #2d3748;
+      
+      /* Accents */
+      --neu-accent: #667eea;
+      --neu-accent-hover: #5a67d8;
+      
+      /* Shadow Presets */
+      --neu-extruded: 12px 12px 24px var(--neu-shadow-dark), -12px -12px 24px var(--neu-shadow-light);
+      --neu-pressed: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
+      --neu-elevated: 16px 16px 32px var(--neu-shadow-dark), -16px -16px 32px var(--neu-shadow-light);
+      
+      /* Radius */
+      --neu-radius-sm: 8px;
+      --neu-radius-md: 12px;
+      --neu-radius-lg: 20px;
+      
+      /* Transition */
+      --neu-transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode */
+    :root[data-theme="dark"] {
+      --neu-bg: #2d3748;
+      --neu-bg-light: #3d4a5c;
+      --neu-bg-dark: #1a202c;
+      --neu-shadow-dark: #1a202c;
+      --neu-shadow-light: #3d4a5c;
+      --neu-text: #e2e8f0;
+      --neu-text-secondary: #a0aec0;
+      --neu-heading: #f7fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--neu-bg);
+      color: var(--neu-text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      padding: 64px;
+      background: linear-gradient(145deg, var(--neu-bg-light), var(--neu-bg), var(--neu-bg-dark));
+      border-radius: var(--neu-radius-lg);
+      box-shadow: var(--neu-extruded);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--neu-heading);
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--neu-text-secondary);
+      max-width: 600px;
+      margin-bottom: 32px;
+    }
+
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--neu-heading);
+      background: var(--neu-bg);
+      border: none;
+      border-radius: var(--neu-radius-md);
+      box-shadow: var(--neu-extruded);
+      cursor: pointer;
+      transition: box-shadow var(--neu-transition), transform var(--neu-transition);
+    }
+
+    .btn:hover {
+      box-shadow: var(--neu-elevated);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      box-shadow: var(--neu-pressed);
+      transform: translateY(0);
+    }
+
+    .btn--primary {
+      background: var(--neu-accent);
+      color: #ffffff;
+    }
+
+    .btn--primary:hover {
+      background: var(--neu-accent-hover);
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--neu-bg);
+      border-radius: var(--neu-radius-lg);
+      box-shadow: var(--neu-extruded);
+      padding: 32px;
+      transition: box-shadow var(--neu-transition), transform var(--neu-transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--neu-elevated);
+      transform: translateY(-4px);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--neu-heading);
+      margin-bottom: 12px;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--neu-text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--neu-text);
+      background: var(--neu-bg);
+      border: none;
+      border-radius: var(--neu-radius-md);
+      box-shadow: var(--neu-pressed);
+      transition: box-shadow var(--neu-transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      box-shadow: var(--neu-pressed), 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+
+    .form-input::placeholder {
+      color: var(--neu-text-secondary);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--neu-bg);
+      border: none;
+      border-radius: 50%;
+      box-shadow: var(--neu-extruded);
+      cursor: pointer;
+      font-size: 20px;
+      transition: box-shadow var(--neu-transition);
+    }
+
+    .theme-toggle:hover {
+      box-shadow: var(--neu-elevated);
+    }
+
+    .theme-toggle:active {
+      box-shadow: var(--neu-pressed);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌓
+  </button>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Neuphorism Design</h1>
+      <p>A soft, tactile design system featuring extruded shadows and pressed states that create depth through light simulation.</p>
+      <div style="display: flex; gap: 16px;">
+        <button class="btn btn--primary">Get Started</button>
+        <button class="btn">Learn More</button>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Extruded Shadows</h3>
+        <p>Elements appear to rise from the surface with dual-direction shadows creating a 3D effect.</p>
+      </div>
+      <div class="card">
+        <h3>Pressed States</h3>
+        <p>Interactive elements sink into the surface on activation using inset shadows.</p>
+      </div>
+      <div class="card">
+        <h3>Soft Surfaces</h3>
+        <p>Muted color palettes with subtle gradients create a cohesive, calming interface.</p>
+      </div>
+    </div>
+
+    <div class="card" style="max-width: 500px;">
+      <h3 style="margin-bottom: 24px;">Contact Form</h3>
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-input" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input" rows="4" placeholder="Enter your message" style="resize: vertical;"></textarea>
+      </div>
+      <button class="btn btn--primary" style="width: 100%;">Send Message</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      root.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    }
+  </script>
+</body>
+</html>
