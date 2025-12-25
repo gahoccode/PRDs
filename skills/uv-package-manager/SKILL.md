@@ -23,6 +23,7 @@ Comprehensive guide to using uv, an extremely fast Python package installer and 
 ## Core Concepts
 
 ### 1. What is uv?
+
 - **Ultra-fast package installer**: 10-100x faster than pip
 - **Written in Rust**: Leverages Rust's performance
 - **Drop-in pip replacement**: Compatible with pip workflows
@@ -32,6 +33,7 @@ Comprehensive guide to using uv, an extremely fast Python package installer and 
 - **Lockfile support**: Reproducible installations
 
 ### 2. Key Features
+
 - Blazing fast installation speeds
 - Disk space efficient with global cache
 - Compatible with pip, pip-tools, poetry
@@ -41,6 +43,7 @@ Comprehensive guide to using uv, an extremely fast Python package installer and 
 - Built-in virtual environment support
 
 ### 3. UV vs Traditional Tools
+
 - **vs pip**: 10-100x faster, better resolver
 - **vs pip-tools**: Faster, simpler, better UX
 - **vs poetry**: Faster, less opinionated, lighter
@@ -669,6 +672,176 @@ repos:
   }
 }
 ```
+
+### Pattern 23: Init
+
+### Simple Init
+
+```bash
+uv init --no-readme --no-workspace
+```
+
+### Import dependencies from requirements.txt:
+
+```bash
+uv add -r requirements.txt
+```
+
+### **🏗️ Project Type Flags**
+
+- **-lib**
+  Creates a **library-style** project with a src/ directory and a package structure (e.g., src/mypkg/**init**.py).
+  Useful if you’re building a reusable Python package.
+- **-bare (good for existing project)**
+  Creates the **minimum setup**: just a pyproject.toml (and maybe .python-version), without extra files like README.md, main.py, or .gitignore.
+  Good if you want to start from scratch or control everything yourself.
+
+---
+
+### **🧰 Other Helpful Flags**
+
+- **-package <name>**
+  Explicitly name the package directory instead of defaulting to the project name.
+  Example:
+
+```
+uv init myproj --lib --package mylib
+```
+
+- → will create src/mylib/ instead of src/myproj/.
+- **-no-git**
+  Prevents uv from running git init. By default, uv initializes a Git repo for you.
+
+---
+
+👉 In short:
+
+- -lib = library (package) project.
+- -bare = minimal setup, only config.
+- -package = custom package name.
+- -no-git = skip Git repo initialization.
+
+## **-lib**
+
+## **→ Create a**
+
+## **library / package-style**
+
+## **project**
+
+By default, uv init creates a simple script layout, e.g.:
+
+```
+myproj/
+├── .gitignore
+├── .python-version
+├── README.md
+├── main.py
+└── pyproject.toml
+```
+
+But when you add the --lib flag:
+
+```
+uv init myproj --lib
+```
+
+It generates a **library layout** suitable for reusable Python packages (e.g., something you’d publish to PyPI):
+
+```
+myproj/
+├── .gitignore
+├── .python-version
+├── README.md
+├── pyproject.toml
+└── src/
+    └── myproj/
+        └── __init__.py
+```
+
+Key differences:
+
+- A src/ folder is created — this is a **best practice** structure for packaging (prevents import issues and helps testing).
+- A package directory matching your project name (myproj/) is created under src/.
+- Instead of a main.py, you get an **empty **init**.py**, making it a proper Python package.
+- pyproject.toml is configured for building a library, not just running a script.
+
+👉 Use --lib when:
+
+- You’re building a **package** that will be imported by other code.
+- You want a clean structure for unit testing and distribution.
+- You intend to publish to PyPI or distribute internally as a module.
+
+---
+
+## **🧩**
+
+## **-package**
+
+## **→ Customize the package directory name**
+
+By default, the package directory under src/ matches the **project name**.
+
+For example:
+
+```
+uv init cool-app --lib
+```
+
+Produces:
+
+```
+src/
+└── cool_app/
+    └── __init__.py
+```
+
+But if you want to use a **different package name**, you can do:
+
+```
+uv init cool-app --lib --package mylib
+```
+
+Result:
+
+```
+src/
+└── mylib/
+    └── __init__.py
+```
+
+And pyproject.toml will point to mylib as the importable package, even though the project folder is still cool-app.
+
+👉 Use --package when:
+
+- Your **distribution name** and **import name** differ.
+- You want to avoid dashes or awkward names in imports.
+- You’re working with a legacy package name or renaming a project.
+
+---
+
+### **📝 Quick Summary**
+
+| **Flag**  | **Purpose**                                             | **Typical Use Case**                             |
+| --------- | ------------------------------------------------------- | ------------------------------------------------ |
+| --lib     | Sets up a library/package structure (src/, **init**.py) | Building reusable Python libraries               |
+| --package | Overrides the default package folder name under src/    | When you want different project vs. import names |
+
+---
+
+👉 **Example use case:**
+
+You’re creating a project called my-cool-lib, but you want people to import cool in Python:
+
+```
+uv init my-cool-lib --lib --package cool
+```
+
+→ project name = my-cool-lib
+
+→ import name = cool
+
+---
 
 ## Troubleshooting
 
