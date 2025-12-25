@@ -1,3 +1,8 @@
+---
+name: Portfolio Optimization with PyPortfolioOpt
+description: A comprehensive guide to portfolio optimization using PyPortfolioOpt, covering expected returns calculation, risk models, and optimization techniques.Use when users ask to optimize their portfolio or need advice on asset allocation.
+---
+
 # Portfolio Optimization with PyPortfolioOpt
 
 ## Overview
@@ -22,6 +27,7 @@ mu = mean_historical_return(prices_df, log_returns=log_returns)
 ```
 
 **Key Parameters:**
+
 - `log_returns=False`: Uses simple percentage returns (default, suitable for most cases)
 - `log_returns=True`: Uses logarithmic returns (more robust for volatile assets, longer time horizons)
 
@@ -30,6 +36,7 @@ mu = mean_historical_return(prices_df, log_returns=log_returns)
 Estimate the covariance matrix of asset returns. PyPortfolioOpt provides multiple methods for different scenarios:
 
 #### Sample Covariance (Standard Method)
+
 Basic empirical covariance from historical returns. Simple but can be noisy with limited data:
 
 ```python
@@ -43,6 +50,7 @@ S = sample_cov(prices_df)
 ---
 
 #### Ledoit-Wolf Shrinkage
+
 Shrinks sample covariance toward a structured target (identity matrix). Reduces estimation error while preserving correlation structure:
 
 ```python
@@ -56,6 +64,7 @@ S = CovarianceShrinkage(prices_df).ledoit_wolf()
 ---
 
 #### Single-Factor Model (Market Model)
+
 Uses a single market factor to estimate covariance. Assumes returns driven by market + idiosyncratic factors:
 
 ```python
@@ -71,6 +80,7 @@ S = CovarianceShrinkage(prices_df).single_factor_model()
 ---
 
 #### Denoised Covariance (Random Matrix Theory)
+
 Filters out noise from sample covariance using eigenvalue decomposition. Removes small eigenvalues (noise) while preserving signal:
 
 ```python
@@ -84,6 +94,7 @@ S = CovarianceShrinkage(prices_df).denoised_covariance()
 ---
 
 #### Custom Shrinkage Target
+
 Combine shrinkage with custom target matrix (e.g., correlation matrix, structured covariance):
 
 ```python
@@ -98,6 +109,7 @@ S = shrinkage.ledoit_wolf()
 ---
 
 #### Matrix Validation & Fixing
+
 Ensure covariance matrix is positive semidefinite (required for optimization):
 
 ```python
@@ -114,12 +126,12 @@ S_fixed = fix_nonpositive_semidefinite(S)
 
 Choose the appropriate covariance model based on your data and constraints:
 
-| Method | Use Case | Pros | Cons |
-|--------|----------|------|------|
-| **sample_cov** | Baseline, many assets (N > 100+) | Unbiased, simple | High estimation error, requires large N |
-| **ledoit_wolf** | Limited data, high correlation | Robust, reduces noise | Assumes specific shrinkage target |
-| **single_factor_model** | Large universes (N > 500) | Parsimonious, stable | Assumes factor dominance |
-| **denoised_covariance** | Noisy/high-frequency data | Better Sharpe ratios | Computationally intensive |
+| Method                  | Use Case                         | Pros                  | Cons                                    |
+| ----------------------- | -------------------------------- | --------------------- | --------------------------------------- |
+| **sample_cov**          | Baseline, many assets (N > 100+) | Unbiased, simple      | High estimation error, requires large N |
+| **ledoit_wolf**         | Limited data, high correlation   | Robust, reduces noise | Assumes specific shrinkage target       |
+| **single_factor_model** | Large universes (N > 500)        | Parsimonious, stable  | Assumes factor dominance                |
+| **denoised_covariance** | Noisy/high-frequency data        | Better Sharpe ratios  | Computationally intensive               |
 
 ### Decision Tree for Risk Model Selection
 
@@ -174,11 +186,10 @@ for name, metrics in results.items():
     print(f"{name:15} Sharpe: {metrics['sharpe']:.4f}")
 ```
 
-
-
 ## Advanced Optimization Strategies
 
 ### Hierarchical Risk Parity (HRP)
+
 Modern algorithm that doesn't require inverting the covariance matrix. Constructs diversified portfolios by hierarchical clustering:
 
 ```python
@@ -190,6 +201,7 @@ ret_hrp, vol_hrp, sharpe_hrp = hrp.portfolio_performance()
 ```
 
 **Advantages:**
+
 - No covariance matrix inversion (stable, numerically robust)
 - Better out-of-sample performance
 - More diversified allocations
@@ -200,6 +212,7 @@ ret_hrp, vol_hrp, sharpe_hrp = hrp.portfolio_performance()
 ---
 
 ### Black-Litterman Model
+
 Incorporates your views about future returns with market equilibrium. Starts from market-implied returns, adjusts with expert views:
 
 ```python
@@ -227,6 +240,7 @@ ret_bl, vol_bl, sharpe_bl = ef.portfolio_performance()
 ```
 
 **Relative Views (Pairs Trading):**
+
 ```python
 # View: AAPL will outperform GOOG by 5%
 views = {
@@ -238,6 +252,7 @@ mu_bl = bl.bl_returns()
 ```
 
 **Market-Implied Risk Aversion:**
+
 ```python
 from pypfopt.black_litterman import market_implied_risk_aversion
 
@@ -255,6 +270,7 @@ bl = BlackLittermanModel(S, absolute_views=views, risk_aversion=delta)
 ## Classical Optimization Strategies
 
 ### Max Sharpe Ratio Portfolio
+
 Maximizes risk-adjusted returns (return per unit of risk):
 
 ```python
@@ -271,6 +287,7 @@ ret_sharpe, std_sharpe, sharpe = ef_max_sharpe.portfolio_performance(
 **Use Case:** Best risk-adjusted returns; suitable for most investors
 
 ### Minimum Volatility Portfolio
+
 Minimizes portfolio standard deviation:
 
 ```python
@@ -285,13 +302,14 @@ ret_min_vol, std_min_vol, sharpe_min_vol = ef_min_vol.portfolio_performance(
 **Use Case:** Conservative investors prioritizing stability over returns
 
 ### Maximum Utility Portfolio
+
 Balances return and risk according to risk aversion parameter:
 
 ```python
 risk_aversion = 2.0  # Higher value = more conservative
 ef_max_utility = EfficientFrontier(mu, S)
 ef_max_utility.max_quadratic_utility(
-    risk_aversion=risk_aversion, 
+    risk_aversion=risk_aversion,
     market_neutral=False
 )
 weights_max_utility = ef_max_utility.clean_weights()
@@ -307,6 +325,7 @@ ret_utility, std_utility, sharpe_utility = ef_max_utility.portfolio_performance(
 ## Regularization & Advanced Constraints
 
 ### L2 Regularization
+
 Penalizes small weights to reduce portfolio turnover and improve stability:
 
 ```python
@@ -321,6 +340,7 @@ weights = ef.clean_weights()
 **Effect:** More diversified portfolio with fewer small positions
 
 **Tuning gamma:**
+
 - `gamma=0`: No regularization (standard optimization)
 - `gamma=0.5`: Light regularization
 - `gamma=1.0-2.0`: Strong regularization
@@ -329,6 +349,7 @@ weights = ef.clean_weights()
 ---
 
 ### Efficient Risk (Target Volatility)
+
 Maximize returns given a target volatility level:
 
 ```python
@@ -344,6 +365,7 @@ ret, vol, sharpe = ef.portfolio_performance()
 ---
 
 ### Efficient Return (Target Return)
+
 Minimize volatility while achieving a minimum target return:
 
 ```python
@@ -359,6 +381,7 @@ ret, vol, sharpe = ef.portfolio_performance()
 ---
 
 ### Bounded Weights
+
 Constrain individual asset weights:
 
 ```python
@@ -375,6 +398,7 @@ ef.max_sharpe()
 ---
 
 ### Sector Constraints
+
 Limit weight allocation to sectors:
 
 ```python
@@ -389,7 +413,7 @@ sector_weights = {
 for sector, max_weight in sector_weights.items():
     sector_assets = [ticker for ticker, s in asset_to_sector.items() if s == sector]
     sector_indices = [list(ef.tickers).index(t) for t in sector_assets]
-    
+
     ef.add_constraint(
         lambda w: np.sum([w[i] for i in sector_indices]) <= max_weight
     )
@@ -421,6 +445,7 @@ print(leftover)    # Remaining capital after allocation
 ## Key Methods & Utilities
 
 ### Clean Weights
+
 Remove negligible weights (typically < 1e-4) and normalize:
 
 ```python
@@ -429,6 +454,7 @@ weights = ef.clean_weights()
 ```
 
 ### Portfolio Performance
+
 Calculate portfolio metrics:
 
 ```python
@@ -438,6 +464,7 @@ annual_return, annual_volatility, sharpe_ratio = ef.portfolio_performance(
 ```
 
 ### Exception Handling
+
 Catch optimization errors:
 
 ```python
@@ -452,6 +479,7 @@ except OptimizationError as e:
 ## Best Practices
 
 ### 1. Risk Model Selection
+
 - **Start with:** Ledoit-Wolf shrinkage (`CovarianceShrinkage().ledoit_wolf()`) as robust default
 - **Scale up:** For 50+ assets, consider `single_factor_model()` for numerical stability
 - **High-frequency/noisy data:** Test `denoised_covariance()` for improved Sharpe ratios
@@ -459,6 +487,7 @@ except OptimizationError as e:
 - **Expert views:** Use Black-Litterman to incorporate forecasts
 
 ### 2. Data Preparation
+
 - Use daily closing prices in a pandas DataFrame
 - Index should be timestamps; columns should be ticker symbols
 - Ensure sufficient historical data:
@@ -467,47 +496,55 @@ except OptimizationError as e:
   - 5+ years ideal for factor models
 
 ### 3. Instance Management
+
 - Create separate `EfficientFrontier` instances for each optimization strategy
 - Reusing instances may cause convergence issues
 - Reset constraints between optimizations
 
 ### 4. Returns Calculation
+
 - **Log returns:** Better for volatile assets, extended periods, mathematical convenience
 - **Simple returns:** Adequate for most portfolio optimization (default)
 - **Consistency:** Use same method for expected returns and covariance
 - **Forecast method:** Historical mean can be biased; consider expert views (Black-Litterman)
 
 ### 5. Risk-Free Rate
+
 - Should match the frequency of your data
 - For daily data with annual returns: use annualized rate (e.g., 0.02 for 2% annual)
 - Affects Sharpe ratio calculation and max_sharpe optimization
 - Use realistic rate matching your opportunity cost
 
 ### 6. Regularization Strategy
+
 - Add L2 regularization to reduce small weights and turnover
 - Start with `gamma=1.0` and adjust based on portfolio concentration
 - Higher gamma → more diversified, more stable out-of-sample
 - Trade-off: diversification vs. concentration in best ideas
 
 ### 7. Constraints & Bounds
+
 - Use weight bounds to enforce long-only (0, ∞) or allow shorts (-bounds, bounds)
 - Add sector constraints for diversification requirements
 - Prefer soft constraints (add_objective) over hard bounds when possible
 - Test constraint impact on Sharpe ratio and portfolio concentration
 
 ### 8. Discrete Allocation
+
 - Always use actual market prices in `DiscreteAllocation`
 - Check `leftover` amount; large leftovers indicate thin trading or high prices
 - The greedy algorithm adds shares one at a time until budget exhausted
 - For small portfolios: manually adjust if allocation deviates significantly
 
 ### 9. Out-of-Sample Performance
+
 - Compare multiple risk models on historical data
 - Prefer models with better stability across time periods
 - Test on recent/validation data before deploying
 - HRP often outperforms traditional optimization out-of-sample
 
 ### 10. Monitoring & Rebalancing
+
 - Recalculate covariance periodically (monthly/quarterly)
 - Use shrinkage methods for stability if data windows are short
 - Track realized vs. expected returns to validate assumptions
@@ -516,6 +553,7 @@ except OptimizationError as e:
 ## Common Workflows
 
 ### Risk Model Comparison Workflow
+
 ```python
 import pandas as pd
 from pypfopt.expected_returns import mean_historical_return
@@ -565,6 +603,7 @@ for name in sorted(results.keys(), key=lambda x: results[x]['sharpe'], reverse=T
 ```
 
 ### Black-Litterman Workflow
+
 ```python
 from pypfopt.black_litterman import BlackLittermanModel
 from pypfopt.efficient_frontier import EfficientFrontier
@@ -590,6 +629,7 @@ print(f"BL Sharpe Ratio: {sharpe_bl:.4f}")
 ```
 
 ### HRP (Hierarchical Risk Parity) Workflow
+
 ```python
 from pypfopt.hierarchical_portfolio import HRPOpt
 
@@ -612,6 +652,7 @@ print(f"Min Vol Volatility: {vol_mv:.4f}")
 ```
 
 ### Complete Optimization Pipeline
+
 ```python
 import pandas as pd
 from pypfopt.expected_returns import mean_historical_return
@@ -644,6 +685,7 @@ print(f"Leftover: ${leftover:.2f}")
 ```
 
 ### Comparing Multiple Strategies
+
 ```python
 strategies = {}
 
@@ -675,6 +717,7 @@ strategies['max_utility'] = {
 ## Advanced Options
 
 ### Bounds on Weights
+
 Constrain individual asset weights:
 
 ```python
@@ -685,6 +728,7 @@ ef.max_sharpe()
 ```
 
 ### Market Neutrality
+
 Allow short positions:
 
 ```python
@@ -693,6 +737,7 @@ ef.max_quadratic_utility(risk_aversion=2.0, market_neutral=True)
 ```
 
 ### Transaction Costs & Turnover
+
 The library supports transaction costs and turnover constraints through optimization parameters.
 
 ## Documentation & Resources
